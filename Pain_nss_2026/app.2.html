@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pain Dashboard • ThingSpeak Graphs</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+    :root{
+        --bg:#020617;
+        --glass:rgba(255,255,255,0.08);
+        --glass-border:rgba(255,255,255,0.15);
+        --text:#e7eeff;
+        --muted:#94a3b8;
+        --accent:#00eaff;
+    }
+    body{
+        margin:0;
+        font-family:'Poppins',sans-serif;
+        background:
+          radial-gradient(circle at 20% 20%, #1e1b4b 0%, transparent 40%),
+          radial-gradient(circle at 80% 10%, #4c1d95 0%, transparent 40%),
+          radial-gradient(circle at 50% 80%, #0f766e 0%, transparent 50%),
+          var(--bg);
+        color:var(--text);
+    }
+    .container{max-width:1350px;margin:25px auto;padding:20px;}
+
+    header{text-align:center;}
+    header h1{color:var(--accent);font-size:38px;font-weight:900;text-shadow:0 0 20px #00eaff88;}
+
+    .grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+        gap:20px;margin-top:20px;
+    }
+    .card{
+        padding:20px;border-radius:18px;
+        background:var(--glass);
+        border:1px solid var(--glass-border);
+        backdrop-filter: blur(14px);
+        text-align:center;
+        box-shadow:0 5px 20px rgba(0,0,0,0.4);
+    }
+    .icon-box{font-size:32px;color:var(--accent);}
+    .label{font-size:14px;color:var(--muted);}
+    .value{font-size:26px;font-weight:700;margin-top:5px;}
+
+    .graphs{
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:25px;
+        margin-top:30px;
+    }
+
+    iframe{
+        border-radius:16px;
+        border:1px solid var(--glass-border);
+        box-shadow:0 3px 18px rgba(0,0,0,0.4);
+    }
+
+    /* CHATBOT */
+    #chatbot-box{
+        position:fixed;
+        bottom:20px;
+        right:20px;
+        width:320px;
+        height:420px;
+        background:var(--glass);
+        border:1px solid var(--glass-border);
+        border-radius:18px;
+        backdrop-filter:blur(12px);
+        padding:10px;
+        display:flex;
+        flex-direction:column;
+    }
+    #chat-log{flex:1;overflow-y:auto;padding:5px;font-size:14px;color:white;}
+    #chat-input{
+        width:100%;
+        padding:10px;
+        border-radius:10px;
+        border:none;
+        background:#ffffff22;
+        margin-top:8px;
+        color:white;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+<h1>Pain Health Dashboard</h1>
+<p style="color:#94a3b8">Live Values + ThingSpeak Graphs + AI Chatbot</p>
+</header>
+
+<!-- LIVE CARDS -->
+<div class="grid">
+    <div class="card"><div class="icon-box"><i class="fa-solid fa-heart-pulse"></i></div><div class="label">BPM</div><div class="value" id="bpm">--</div></div>
+    <div class="card"><div class="icon-box"><i class="fa-solid fa-lungs"></i></div><div class="label">SpO₂</div><div class="value" id="spo2">--</div></div>
+    <div class="card"><div class="icon-box"><i class="fa-solid fa-temperature-three-quarters"></i></div><div class="label">Temperature</div><div class="value" id="temp">--</div></div>
+    <div class="card"><div class="icon-box"><i class="fa-solid fa-droplet"></i></div><div class="label">Humidity</div><div class="value" id="hum">--</div></div>
+    <div class="card"><div class="icon-box"><i class="fa-solid fa-bolt"></i></div><div class="label">GSR</div><div class="value" id="gsr">--</div></div>
+    <div class="card"><div class="icon-box"><i class="fa-solid fa-moon"></i></div><div class="label">Sleep Quality</div><div class="value" id="sleep">--</div></div>
+    <div class="card"><div class="icon-box"><i class="fa-solid fa-fire-flame-curved"></i></div><div class="label">Heat Therapy</div><div class="value" id="heat">--</div></div>
+</div>
+
+<h2 style="margin-top:30px;text-align:center;color:#00eaff;">ThingSpeak Live Graphs</h2>
+
+<!-- THINGSPEAK SMALL GRAPHS -->
+<div class="graphs">
+
+<iframe width="350" height="200"
+src="https://thingspeak.com/channels/565129/charts/1?bgcolor=%23020314&color=%23FF0000&dynamic=true&results=20&type=line"></iframe>
+
+<iframe width="350" height="200"
+src="https://thingspeak.com/channels/565129/charts/2?bgcolor=%23020314&color=%2300eaff&dynamic=true&results=20&type=line"></iframe>
+
+<iframe width="350" height="200"
+src="https://thingspeak.com/channels/565129/charts/3?bgcolor=%23020314&color=%23FFA500&dynamic=true&results=20&type=line"></iframe>
+
+<iframe width="350" height="200"
+src="https://thingspeak.com/channels/565129/charts/4?bgcolor=%23020314&color=%2300FF00&dynamic=true&results=20&type=line"></iframe>
+
+<iframe width="350" height="200"
+src="https://thingspeak.com/channels/565129/charts/5?bgcolor=%23020314&color=%23AA00FF&dynamic=true&results=20&type=line"></iframe>
+
+<iframe width="350" height="200"
+src="https://thingspeak.com/channels/565129/charts/6?bgcolor=%23020314&color=%23FFE600&dynamic=true&results=20&type=line"></iframe>
+
+<iframe width="350" height="200"
+src="https://thingspeak.com/channels/565129/charts/7?bgcolor=%23020314&color=%2300FFFF&dynamic=true&results=20&type=line"></iframe>
+
+</div>
+
+<p id="stamp" style="text-align:center;margin-top:20px;color:#94a3b8;">Updating...</p>
+
+</div>
+
+
+<!-- CHATBOT UI -->
+<div id="chatbot-box">
+    <div id="chat-log"></div>
+    <input id="chat-input" placeholder="Ask AI..." onkeydown="if(event.key==='Enter') sendMessage()">
+</div>
+
+
+<script>
+/* ------------ LIVE VALUES: THINGSPEAK LAST DATA ------------ */
+const CHANNEL_ID = "565129";
+
+async function updateData(){
+    try{
+        const url=`https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json`;
+        const res=await fetch(url);
+        const d=await res.json();
+
+        document.getElementById("bpm").innerText = d.field1 || "--";
+        document.getElementById("spo2").innerText = d.field2 || "--";
+        document.getElementById("temp").innerText = d.field3+"°C" || "--";
+        document.getElementById("hum").innerText  = d.field4+"%" || "--";
+        document.getElementById("gsr").innerText  = d.field5 || "--";
+        document.getElementById("heat").innerText = d.field6 || "--";
+        document.getElementById("sleep").innerText= d.field7 || "--";
+
+        document.getElementById("stamp").innerText =
+            "Last Updated: " + new Date().toLocaleTimeString();
+
+    }catch(e){
+        document.getElementById("stamp").innerText="Error fetching data";
+    }
+}
+
+updateData();
+setInterval(updateData,5000);
+
+
+/* ------------------------ GROQ LLM CHATBOT ------------------------ */
+const GROQ_API_KEY = "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";
+
+async function sendMessage() {
+    let input = document.getElementById("chat-input");
+    let msg = input.value.trim();
+    if (!msg) return;
+
+    addChat("You", msg);
+    input.value = "";
+
+    try {
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + GROQ_API_KEY
+            },
+            body: JSON.stringify({
+                model: "llama-3.1-8b-instant",
+                messages: [{ role: "user", content: msg }]
+            })
+        });
+
+        const data = await response.json();
+        let reply = data?.choices?.[0]?.message?.content || "No reply from model.";
+        addChat("AI", reply);
+
+    } catch (error) {
+        addChat("AI", "Connection error with Groq API.");
+    }
+}
+
+function addChat(sender,text){
+    let log=document.getElementById("chat-log");
+    log.innerHTML += `<p><b>${sender}:</b> ${text}</p>`;
+    log.scrollTop=log.scrollHeight;
+}
+</script>
+
+</body>
+</html>

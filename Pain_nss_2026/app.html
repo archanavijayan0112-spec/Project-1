@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> • Live Health Monitoring Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+    :root{
+        --bg: #020617;
+        --glass: rgba(255,255,255,0.06);
+        --glass-border: rgba(255,255,255,0.12);
+        --text-light: #e7eeff;
+        --muted: #8693aa;
+        --accent: #00eaff;
+        --accent2: #7c3aed;
+    }
+
+    body{
+        margin:0;
+        font-family:'Poppins',sans-serif;
+        background:
+            radial-gradient(circle at 20% 20%, #1e1b4b 0%, transparent 40%),
+            radial-gradient(circle at 80% 10%, #4c1d95 0%, transparent 40%),
+            radial-gradient(circle at 50% 80%, #0f766e 0%, transparent 50%),
+            var(--bg);
+        color:var(--text-light);
+        min-height:100vh;
+        overflow-x:hidden;
+    }
+
+    .container{
+        max-width:1200px;
+        margin:30px auto;
+        padding:20px;
+    }
+
+    header{
+        text-align:center;
+        padding:20px 0;
+    }
+    header h1{
+        font-size:36px;
+        font-weight:900;
+        color:#00eaff;
+        text-shadow:0 0 25px #00eaff88;
+    }
+    header p{
+        margin:0;
+        color:var(--muted);
+        font-size:14px;
+    }
+
+    .grid{
+        display:grid;
+        grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+        gap:20px;
+        margin-top:30px;
+    }
+
+    .card{
+        background:var(--glass);
+        border:1px solid var(--glass-border);
+        padding:20px;
+        border-radius:18px;
+        backdrop-filter: blur(14px);
+        box-shadow:0 8px 25px rgba(0,0,0,0.4);
+        position:relative;
+        overflow:hidden;
+    }
+
+    .card:before{
+        content:"";
+        position:absolute;
+        top:-40%;
+        right:-40%;
+        width:180px;
+        height:180px;
+        background:var(--accent);
+        opacity:0.15;
+        filter:blur(80px);
+        border-radius:50%;
+    }
+
+    .icon-box{
+        font-size:30px;
+        margin-bottom:10px;
+        color:var(--accent);
+        text-shadow: 0 0 20px #00eaff;
+    }
+
+    .label{
+        font-size:14px;
+        color:var(--muted);
+    }
+    .value{
+        margin-top:5px;
+        font-size:28px;
+        font-weight:700;
+        color:#fff;
+    }
+
+    .footer-note{
+        margin-top:30px;
+        text-align:center;
+        color:var(--muted);
+        font-size:12px;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Pain Health Dashboard</h1>
+        <p>Ultra-modern real-time sensor visualization • Auto-refresh 5s</p>
+    </header>
+
+    <div class="grid">
+        <div class="card"><div class="icon-box"><i class="fa-solid fa-heart-pulse"></i></div><div class="label">BPM</div><div class="value" id="bpm">--</div></div>
+        <div class="card"><div class="icon-box"><i class="fa-solid fa-lungs"></i></div><div class="label">SpO₂</div><div class="value" id="spo2">--</div></div>
+        <div class="card"><div class="icon-box"><i class="fa-solid fa-temperature-three-quarters"></i></div><div class="label">Temperature</div><div class="value" id="temp">--</div></div>
+        <div class="card"><div class="icon-box"><i class="fa-solid fa-droplet"></i></div><div class="label">Humidity</div><div class="value" id="hum">--</div></div>
+        <div class="card"><div class="icon-box"><i class="fa-solid fa-bolt"></i></div><div class="label">GSR</div><div class="value" id="gsr">--</div></div>
+       
+        <div class="card"><div class="icon-box"><i class="fa-solid fa-moon"></i></div><div class="label">Sleep Quality</div><div class="value" id="sleep">--</div></div>
+        <div class="card"><div class="icon-box"><i class="fa-solid fa-fire-flame-curved"></i></div><div class="label">Heat Therapy</div><div class="value" id="heat">--</div></div>
+    </div>
+
+    <div class="footer-note" id="stamp">Updating...</div>
+</div>
+
+<script>
+    const CHANNEL_ID = "565129";      // <--- Replace
+    const API_KEY = "";                        // <--- public channel = blank
+
+    async function updateData(){
+        try{
+            const url = `https://api.thingspeak.com/channels/${CHANNEL_ID}/feeds/last.json?api_key=${API_KEY}`;
+            const res = await fetch(url);
+            const data = await res.json();
+
+            document.getElementById("bpm").innerText = data.field1 || "--";
+            document.getElementById("spo2").innerText = data.field2 || "--";
+            document.getElementById("temp").innerText = data.field3 || "-- °C";
+            document.getElementById("hum").innerText = data.field4 || "-- %";
+            document.getElementById("gsr").innerText = data.field5 || "--";
+            document.getElementById("heat").innerText = data.field6 || "--";
+            document.getElementById("sleep").innerText = data.field7 || "--";
+
+            // If X and Y are in field8,9 for example you can add:
+            // document.getElementById("x").innerText = data.field8 || "--";
+            // document.getElementById("y").innerText = data.field9 || "--";
+
+            document.getElementById("stamp").innerText =
+                "Last Updated: " + new Date().toLocaleTimeString();
+
+        }catch(e){
+            document.getElementById("stamp").innerText = "Error fetching data";
+        }
+    }
+
+    updateData();
+    setInterval(updateData, 5000);
+</script>
+
+</body>
+</html>
